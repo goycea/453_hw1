@@ -90,4 +90,12 @@ public class ShoppingCart {
         }
         System.out.println("Total cost: " + totalCost);
     }
+
+    public void clearCart() {
+        for (int i = 0; i < totalProducts; i++) {
+            products[i] = null;
+        }
+        totalProducts = 0;
+        totalCost = 0;
+    }
 }

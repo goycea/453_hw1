@@ -41,15 +41,19 @@ public class Main {
             while (true) {
                 System.out.println("Choose a product to remove or exit to stop");
                 System.out.println("0. Exit");
+                System.out.println("1. Buy Products");
                 ProductModel[] productsInCart = cart.getProducts();
                 for (int i = 0; i < cart.getTotalProducts(); i++) {
-                    System.out.println((i + 1) + ". " + productsInCart[i].getName() + " - "
+                    System.out.println((i + 2) + ". " + productsInCart[i].getName() + " - "
                             + productsInCart[i].getPrice() + " - " + productsInCart[i].getQuantity() + " - " + productsInCart[i].getUnit());
                 }
                 String response = user.next();
                 if (response.equals("0")) {
                     break;
-                } else {
+                } else if (response.equals("1")) {
+                    buyProducts();
+                    break;
+                }  else {
                     removeProductFromCart(response);
                 }
             }
@@ -92,4 +96,32 @@ public class Main {
         }
         return -1;
     }
+
+    private static void buyProducts() {
+        System.out.println("Thank you for your purchase! Here is the summary:");
+        cart.printCart();
+        cart.clearCart();
+        System.out.println("Cart has been cleared.");
+
+        removeOutOfStockProducts();
+    }
+
+    private static void removeOutOfStockProducts() {
+        for (int i = 0; i < products.length; i++) {
+            if (products[i].getQuantity() == 0) {
+                products = removeProductFromInventory(products, i);
+            }
+        }
+    }
+
+    private static ProductModel[] removeProductFromInventory(ProductModel[] products, int index) {
+        ProductModel[] newProducts = new ProductModel[products.length - 1];
+        for (int i = 0, j= 0; i < products.length; i++) {
+            if(i != index) {
+                newProducts[j++] = products[i];
+            }
+        }
+        return newProducts;
+    }
+
 }
