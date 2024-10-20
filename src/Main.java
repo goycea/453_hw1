@@ -36,6 +36,7 @@ public class Main {
     private static void showCart() {
         if (cart.getTotalProducts() == 0) {
             System.out.println("There is no product in the cart");
+            MyTimer.waitSecond(2);
         } else {
             System.out.println("Total cost: " + cart.getTotalCost());
             while (true) {
@@ -71,14 +72,11 @@ public class Main {
                 products[productIndex].setQuantity(products[productIndex].getQuantity() - quantity);
             } else {
                 System.out.println("Cart is full");
+                MyTimer.waitSecond(2);
             }
         } else {
             System.out.println("Invalid quantity or product is out of stock");
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            MyTimer.waitSecond(2);
         }
     }
 
@@ -96,7 +94,7 @@ public class Main {
         }
         else {
             System.out.println("Invalid quantity or product");
-            System.out.println("Invalid product");
+            MyTimer.waitSecond(2);
         }
     }
 

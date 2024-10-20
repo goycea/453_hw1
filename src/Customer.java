@@ -20,12 +20,12 @@ public class Customer {
             System.out.println("Insufficient balance");
             System.out.println("Your available balance: " + availableBalance);
             System.out.println("Please remove some items from your cart");
-
         } else {
             availableBalance -= amount;
             System.out.println("Your available balance: " + availableBalance);
             System.out.println("Thank you for shopping with us");
         }
+        MyTimer.waitSecond(2);
     }
 
     public String getName() {

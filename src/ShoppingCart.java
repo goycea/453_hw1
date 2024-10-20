@@ -1,4 +1,5 @@
 import java.util.Timer;
+import java.util.concurrent.TimeUnit;
 
 public class ShoppingCart {
     private final ProductModel[] products;
@@ -15,12 +16,13 @@ public class ShoppingCart {
         return products;
     }
 
-    public void addProduct(ProductModel product, int quantity) {
+    public void addProduct(ProductModel product, int quantity)  {
         // This method should add the product to the cart and update the total cost of the cart.
         // If the cart is full, it should print "Cart is full".
         ProductModel newProduct = new ProductModel(product.getName(), product.getPrice(), quantity, product.getUnit());
         if (totalProducts == 5) {
             System.out.println("Cart is full");
+            MyTimer.waitSecond(2);
         } else {
             int productIndex = findProductIndex(newProduct);
             if (productIndex == -1) {
@@ -32,22 +34,20 @@ public class ShoppingCart {
             totalCost += newProduct.getPrice() * newProduct.getQuantity();
 
             System.out.println("Product added successfully");
+            MyTimer.waitSecond(2);
         }
     }
 
     public int removeProduct(ProductModel product, int quantity) {
-        // This method should remove the product from the cart and return the quantity of the product removed.
-        // Also, it should update the total cost of the cart.
-        // If the product is not found in the cart, it should print "Product not found" and return 0.
-        // If the quantity is greater than the quantity of the product in the cart, it should print "Invalid quantity" and return 0.
-        // If the product is found and the quantity is valid, it should return the quantity of the product removed.
 
         int productIndex = findProductIndex(product);
         if (productIndex == -1) {
             System.out.println("Product not found");
+            MyTimer.waitSecond(2);
             return 0;
         } else if (products[productIndex].getQuantity() < quantity) {
             System.out.println("Invalid quantity");
+            MyTimer.waitSecond(2);
             return 0;
         } else {
 
@@ -96,4 +96,6 @@ public class ShoppingCart {
         totalProducts = 0;
         totalCost = 0;
     }
+
+
 }
