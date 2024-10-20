@@ -63,7 +63,7 @@ public class Main {
     private static void addProductToCart(String response) {
         int productIndex = Integer.parseInt(response) - 2;
         System.out.println("Enter quantity to add");
-        int quantity = Integer.parseInt(user.next());
+        int quantity = getValidatedIntegerInput();
         if (quantity > 0 && quantity <= products[productIndex].getQuantity()) {
             if (cart.getTotalProducts() < 5) {
                 System.out.println(quantity);
@@ -85,7 +85,7 @@ public class Main {
     private static void removeProductFromCart(String response) {
         int productIndex = Integer.parseInt(response) - 2;
         System.out.println("Enter quantity to remove");
-        int quantity = Integer.parseInt(user.next());
+        int quantity = getValidatedIntegerInput();
         ProductModel[] productsInCart = cart.getProducts();
         if (productIndex >= 0 && productIndex < cart.getTotalProducts()
                 && productsInCart[productIndex].getQuantity() > 0 && quantity > 0) {
@@ -113,7 +113,6 @@ public class Main {
         System.out.println("Thank you for your purchase! Here is the summary:");
         cart.printCart();
         cart.clearCart();
-        System.out.println("Cart has been cleared.");
 
         removeOutOfStockProducts();
     }
@@ -134,6 +133,17 @@ public class Main {
             }
         }
         return newProducts;
+    }
+
+    private static int getValidatedIntegerInput() {
+        while (true) {
+            String input = user.next();
+            try {
+                return Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter an integer.");
+            }
+        }
     }
 
 }
