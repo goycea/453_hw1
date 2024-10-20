@@ -8,7 +8,8 @@ class ShoppingCartTest {
     void addProduct() {
         ShoppingCart cart = new ShoppingCart();
         ProductModel product = new ProductModel("TestProduct", 100, 10, "kg");
-        cart.addProduct(product);
+        int quantity = 4;
+        cart.addProduct(product,quantity);
         assertEquals(100, cart.getTotalCost());
         assertEquals(1, cart.getTotalProducts());
     }
@@ -17,7 +18,8 @@ class ShoppingCartTest {
     void removeProduct() {
         ShoppingCart cart = new ShoppingCart();
         ProductModel product = new ProductModel("TestProduct", 100, 10, "piece");
-        cart.addProduct(product);
+        int quantity = 4;
+        cart.addProduct(product,quantity);
         cart.removeProduct(product, 10);
         assertEquals(0, cart.getTotalCost());
         assertEquals(0, cart.getTotalProducts());
@@ -27,7 +29,8 @@ class ShoppingCartTest {
     void printCart() {
         ShoppingCart cart = new ShoppingCart();
         ProductModel product = new ProductModel("TestProduct", 100, 10, "liter");
-        cart.addProduct(product);
+        int quantity = 4;
+        cart.addProduct(product,quantity);
         cart.printCart();
         assertEquals(1000, cart.getTotalCost());
         assertEquals(1, cart.getTotalProducts());

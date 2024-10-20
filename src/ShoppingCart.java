@@ -1,3 +1,5 @@
+import java.util.Timer;
+
 public class ShoppingCart {
     private final ProductModel[] products;
     private int totalProducts;
@@ -13,27 +15,23 @@ public class ShoppingCart {
         return products;
     }
 
-    public void addProduct(ProductModel product) {
-        if (totalProducts < products.length) {
-            if(product.getQuantity() > 0) {
-                // if product is exist in the cart, increase the quantity
-                if(product.getQuantity() > 1) {
-                    for (int i = 0; i < totalProducts; i++) {
-                        if (products[i].getName().equals(product.getName())) {
-                            products[i].setQuantity(products[i].getQuantity() + 1);
-                            totalCost += products[i].getPrice();
-                            return;
-                        }
-                    }
-                }
-                products[totalProducts] = product;
-                totalCost += product.getPrice();
+    public void addProduct(ProductModel product, int quantity) {
+        // This method should add the product to the cart and update the total cost of the cart.
+        // If the cart is full, it should print "Cart is full".
+        ProductModel newProduct = new ProductModel(product.getName(), product.getPrice(), quantity, product.getUnit());
+        if (totalProducts == 5) {
+            System.out.println("Cart is full");
+        } else {
+            int productIndex = findProductIndex(newProduct);
+            if (productIndex == -1) {
+                products[totalProducts] = newProduct;
                 totalProducts++;
             } else {
-                System.out.println("Invalid quantity");
+                products[productIndex].setQuantity(products[productIndex].getQuantity() + quantity);
             }
-        } else {
-            System.out.println("Cart is full");
+            totalCost += newProduct.getPrice() * newProduct.getQuantity();
+
+            System.out.println("Product added successfully");
         }
     }
 
