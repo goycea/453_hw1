@@ -38,26 +38,33 @@ public class ShoppingCart {
     }
 
     public int removeProduct(ProductModel product, int quantity) {
-        int index = findProductIndex(product);
-        if (index != -1) {
-            if (products[index].getQuantity() <= quantity) {
-                products[index].setQuantity(products[index].getQuantity() - quantity);
-                totalCost -= products[index].getPrice() * quantity;
-                if (products[index].getQuantity() == 0) {
-                    for (int i = index; i < totalProducts - 1; i++) {
-                        products[i] = products[i + 1];
-                    }
-                    totalProducts--;
-                }
-                return quantity;
-            } else {
-                System.out.println("Invalid quantity");
-                return 0;
-            }
-        } else {
+        // This method should remove the product from the cart and return the quantity of the product removed.
+        // Also, it should update the total cost of the cart.
+        // If the product is not found in the cart, it should print "Product not found" and return 0.
+        // If the quantity is greater than the quantity of the product in the cart, it should print "Invalid quantity" and return 0.
+        // If the product is found and the quantity is valid, it should return the quantity of the product removed.
+
+        int productIndex = findProductIndex(product);
+        if (productIndex == -1) {
             System.out.println("Product not found");
             return 0;
+        } else if (products[productIndex].getQuantity() < quantity) {
+            System.out.println("Invalid quantity");
+            return 0;
+        } else {
+
+            products[productIndex].setQuantity(products[productIndex].getQuantity() - quantity);
+            totalCost -= products[productIndex].getPrice() * quantity;
+            // if user remove all quantity of the product, remove the product from the cart
+            if (products[productIndex].getQuantity() == 0) {
+                for (int i = productIndex; i < totalProducts - 1; i++) {
+                    products[i] = products[i + 1];
+                }
+                totalProducts--;
+            }
+            return quantity;
         }
+
     }
 
     public int getTotalCost() {
