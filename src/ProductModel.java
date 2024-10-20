@@ -3,7 +3,7 @@ public class ProductModel extends Item {
     private final int price;
     private int quantity;
     private final String unit;
-    
+
     public ProductModel(String name, int price, int quantity, String unit) {
         this.name = name;
         this.price = price;

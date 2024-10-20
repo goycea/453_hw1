@@ -15,7 +15,12 @@ public class Main {
             } else if (response.equals("1")) {
                 showCart();
             } else {
-                addProductToCart(response);
+                if(Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= products.length + 1) {
+                    addProductToCart(response);
+                } else {
+                    System.out.println("There is no such product");
+                    MyTimer.waitSecond(2);
+                }
             }
         }
     }
@@ -38,8 +43,8 @@ public class Main {
             System.out.println("There is no product in the cart");
             MyTimer.waitSecond(2);
         } else {
-            System.out.println("Total cost: " + cart.getTotalCost());
             while (true) {
+                System.out.println("Total cost: " + cart.getTotalCost());
                 System.out.println("Choose a product to remove or exit to stop");
                 System.out.println("0. Exit");
                 System.out.println("1. Buy Products");
@@ -55,7 +60,12 @@ public class Main {
                     buyProducts();
                     break;
                 }  else {
-                    removeProductFromCart(response);
+                    if (Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= cart.getTotalProducts() + 1) {
+                        removeProductFromCart(response);
+                    } else {
+                        System.out.println("There is no such product");
+                        MyTimer.waitSecond(2);
+                    }
                 }
             }
         }
