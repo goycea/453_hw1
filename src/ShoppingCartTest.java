@@ -60,7 +60,7 @@ class ShoppingCartTest {
         removedQuantity = cart.removeProduct(product2, 2);
         assertEquals(2, removedQuantity);
         assertEquals(0, cart.getTotalProducts());
-        assertEquals(4, cart.getTotalCost());
+        assertEquals(0, cart.getTotalCost());
     }
 
     @Test
