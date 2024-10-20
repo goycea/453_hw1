@@ -2,7 +2,7 @@ import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 public class ShoppingCart {
-    private final ProductModel[] products;
+    private ProductModel[] products;
     private int totalProducts;
     private int totalCost;
 
@@ -88,6 +88,19 @@ public class ShoppingCart {
         }
         System.out.println("Total cost: " + totalCost);
     }
+
+    public void buyProducts(Customer customer) {
+        if (customer.getAvailableBalance() >= totalCost) {
+            System.out.println("Thank you for your purchase! Here is the summary:");
+            printCart();
+            customer.subtractionBalance(totalCost);
+            clearCart();
+            Main.removeOutOfStockProducts();
+        } else {
+            System.out.println("Insufficient balance. Your available balance: " + customer.getAvailableBalance() + ", Total cost: " + totalCost);
+        }
+    }
+
 
     public void clearCart() {
         for (int i = 0; i < totalProducts; i++) {

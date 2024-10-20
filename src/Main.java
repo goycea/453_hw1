@@ -5,8 +5,10 @@ public class Main {
     private static ShoppingCart cart = new ShoppingCart();
     private static ProductModel[] products = DummyProducts.getProducts();
     private static Scanner user = new Scanner(System.in);
+    private static Customer customer;
 
     public static void main(String[] args) {
+        askUserBudget();
         while (true) {
             displayMenu();
             String response = user.next();
@@ -23,6 +25,12 @@ public class Main {
                 }
             }
         }
+    }
+
+    private static void askUserBudget() {
+        System.out.println("Enter your budget");
+        double budget = Double.parseDouble(user.next());
+        customer = new Customer("John", budget);
     }
 
     private static void displayMenu() {
@@ -57,7 +65,7 @@ public class Main {
                 if (response.equals("0")) {
                     break;
                 } else if (response.equals("1")) {
-                    buyProducts();
+                    cart.buyProducts(customer);
                     break;
                 }  else {
                     if (Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= cart.getTotalProducts() + 1) {
@@ -127,11 +135,13 @@ public class Main {
 
     private static void removeOutOfStockProducts() {
         for (int i = 0; i < products.length; i++) {
-            if (products[i].getQuantity() == 0) {
+            if (products[i] != null && products[i].getQuantity() <= 0) {
                 products = removeProductFromInventory(products, i);
+                i--;
             }
         }
     }
+
 
     private static ProductModel[] removeProductFromInventory(ProductModel[] products, int index) {
         ProductModel[] newProducts = new ProductModel[products.length - 1];
