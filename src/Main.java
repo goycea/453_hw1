@@ -15,7 +15,12 @@ public class Main {
             } else if (response.equals("1")) {
                 showCart();
             } else {
-                addProductToCart(response);
+                if(Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= products.length + 1) {
+                    addProductToCart(response);
+                } else {
+                    System.out.println("There is no such product");
+                    MyTimer.waitSecond(2);
+                }
             }
         }
     }
@@ -36,9 +41,10 @@ public class Main {
     private static void showCart() {
         if (cart.getTotalProducts() == 0) {
             System.out.println("There is no product in the cart");
+            MyTimer.waitSecond(2);
         } else {
-            System.out.println("Total cost: " + cart.getTotalCost());
             while (true) {
+                System.out.println("Total cost: " + cart.getTotalCost());
                 System.out.println("Choose a product to remove or exit to stop");
                 System.out.println("0. Exit");
                 System.out.println("1. Buy Products");
@@ -54,7 +60,12 @@ public class Main {
                     buyProducts();
                     break;
                 }  else {
-                    removeProductFromCart(response);
+                    if (Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= cart.getTotalProducts() + 1) {
+                        removeProductFromCart(response);
+                    } else {
+                        System.out.println("There is no such product");
+                        MyTimer.waitSecond(2);
+                    }
                 }
             }
         }
@@ -71,14 +82,11 @@ public class Main {
                 products[productIndex].setQuantity(products[productIndex].getQuantity() - quantity);
             } else {
                 System.out.println("Cart is full");
+                MyTimer.waitSecond(2);
             }
         } else {
             System.out.println("Invalid quantity or product is out of stock");
-            try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+            MyTimer.waitSecond(2);
         }
     }
 
@@ -96,7 +104,7 @@ public class Main {
         }
         else {
             System.out.println("Invalid quantity or product");
-            System.out.println("Invalid product");
+            MyTimer.waitSecond(2);
         }
     }
 
