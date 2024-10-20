@@ -133,7 +133,7 @@ public class Main {
         removeOutOfStockProducts();
     }
 
-    private static void removeOutOfStockProducts() {
+    static void removeOutOfStockProducts() {
         for (int i = 0; i < products.length; i++) {
             if (products[i] != null && products[i].getQuantity() <= 0) {
                 products = removeProductFromInventory(products, i);
