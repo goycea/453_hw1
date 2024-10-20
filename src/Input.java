@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
-public class Keyboard {
+public class Input {
     private final Scanner input;
 
-    public Keyboard()
+    public Input()
     {
         input = new Scanner(System.in);
     }
