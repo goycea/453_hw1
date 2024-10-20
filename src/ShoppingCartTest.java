@@ -22,6 +22,7 @@ class ShoppingCartTest {
         ProductModel[] products = cart.getProducts();
         assertEquals(1, products[0].getQuantity());
         assertEquals("Apple", products[0].getName());
+        assertNotNull(products);
     }
 
     @Test
@@ -68,6 +69,7 @@ class ShoppingCartTest {
         cart.addProduct(product1, 1);
         cart.addProduct(product2, 2);
         assertEquals(5, cart.getTotalCost());
+        assertNotEquals(0, cart.getTotalCost());
     }
 
     @Test
@@ -75,6 +77,7 @@ class ShoppingCartTest {
         cart.addProduct(product1, 1);
         cart.addProduct(product2, 2);
         assertEquals(2, cart.getTotalProducts());
+        assertNotEquals(0, cart.getTotalProducts());
     }
 
     @Test
@@ -83,6 +86,8 @@ class ShoppingCartTest {
         cart.addProduct(product2, 2);
         assertEquals(0, cart.findProductIndex(product1));
         assertEquals(1, cart.findProductIndex(product2));
+        assertTrue(cart.findProductIndex(product1) >= 0);
+        assertFalse(cart.findProductIndex(product1) < 0);
     }
 
     @Test
@@ -90,6 +95,7 @@ class ShoppingCartTest {
         cart.addProduct(product1, 1);
         cart.addProduct(product2, 2);
         cart.printCart();
+        assertNotNull(cart);
     }
 
     @Test
@@ -99,5 +105,7 @@ class ShoppingCartTest {
         cart.clearCart();
         assertEquals(0, cart.getTotalProducts());
         assertEquals(0, cart.getTotalCost());
+        assertTrue(cart.getTotalProducts() == 0);
+        assertFalse(cart.getTotalProducts() > 0);
     }
 }
