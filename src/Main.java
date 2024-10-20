@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
     private static ShoppingCart cart = new ShoppingCart();
@@ -37,7 +38,6 @@ public class Main {
             System.out.println("There is no product in the cart");
         } else {
             System.out.println("Total cost: " + cart.getTotalCost());
-            cart.printCart();
             while (true) {
                 System.out.println("Choose a product to remove or exit to stop");
                 System.out.println("0. Exit");
@@ -64,26 +64,38 @@ public class Main {
         int productIndex = Integer.parseInt(response) - 2;
         System.out.println("Enter quantity to add");
         int quantity = Integer.parseInt(user.next());
-        if (productIndex >= 0 && productIndex < products.length && products[productIndex].getQuantity() > 0 && quantity > 0) {
-            ProductModel product = new ProductModel(products[productIndex].getName(), products[productIndex].getPrice(), quantity, products[productIndex].getUnit());
-            cart.addProduct(product);
-            products[productIndex].setQuantity(products[productIndex].getQuantity() - quantity);
+        if (quantity > 0 && quantity <= products[productIndex].getQuantity()) {
+            if (cart.getTotalProducts() < 5) {
+                System.out.println(quantity);
+                 cart.addProduct(products[productIndex], quantity);
+                products[productIndex].setQuantity(products[productIndex].getQuantity() - quantity);
+            } else {
+                System.out.println("Cart is full");
+            }
         } else {
-            System.out.println("Invalid product");
+            System.out.println("Invalid quantity or product is out of stock");
+            try {
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     private static void removeProductFromCart(String response) {
-        int productIndex = Integer.parseInt(response) - 1;
+        int productIndex = Integer.parseInt(response) - 2;
         System.out.println("Enter quantity to remove");
         int quantity = Integer.parseInt(user.next());
         ProductModel[] productsInCart = cart.getProducts();
         if (productIndex >= 0 && productIndex < cart.getTotalProducts()
                 && productsInCart[productIndex].getQuantity() > 0 && quantity > 0) {
-            int removedQuantity = cart.removeProduct(productsInCart[productIndex], quantity);
-            products[findProductIndex(productsInCart[productIndex])].setQuantity(products[findProductIndex(productsInCart[productIndex])].getQuantity() + removedQuantity);
 
-        } else {
+            int removedQuantity = cart.removeProduct(productsInCart[productIndex], quantity);
+            products[findProductIndex(productsInCart[productIndex])]
+                    .setQuantity(products[findProductIndex(productsInCart[productIndex])].getQuantity() + removedQuantity);
+        }
+        else {
+            System.out.println("Invalid quantity or product");
             System.out.println("Invalid product");
         }
     }
