@@ -1,13 +1,13 @@
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Main {
     private static ShoppingCart cart = new ShoppingCart();
-    private static ProductModel[] products = DummyProducts.getProducts();
+    private static Market market = new Market(10); // Assuming a market size of 10
     private static Scanner user = new Scanner(System.in);
     private static Customer customer;
 
     public static void main(String[] args) {
+        initializeMarket();
         askUserBudget();
         while (true) {
             displayMenu();
@@ -17,14 +17,45 @@ public class Main {
             } else if (response.equals("1")) {
                 showCart();
             } else {
-                if(Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= products.length + 1) {
-                    addProductToCart(response);
+                int productIndex = Integer.parseInt(response) - 2;
+                if (productIndex >= 0 && productIndex < market.getProductCount()) {
+                    addProductToCart(productIndex);
                 } else {
                     System.out.println("There is no such product");
                     MyTimer.waitSecond(2);
                 }
             }
         }
+    }
+
+    private static void initializeMarket() {
+        // Product unit kg
+        market.addProduct(new ProductModel("Apple", 1, 10, "kg"));
+        market.addProduct(new ProductModel("Banana", 2, 20, "kg"));
+        market.addProduct(new ProductModel("Orange", 3, 15, "kg"));
+        market.addProduct(new ProductModel("Mango", 4, 5, "kg"));
+        market.addProduct(new ProductModel("Pineapple", 5, 3, "kg"));
+
+        // Product unit piece
+        market.addProduct(new ProductModel("Bleach", 10, 10, "piece"));
+        market.addProduct(new ProductModel("Toilet Paper", 5, 20, "piece"));
+        market.addProduct(new ProductModel("Shampoo", 50, 5, "piece"));
+        market.addProduct(new ProductModel("Soap", 20, 10, "piece"));
+        market.addProduct(new ProductModel("Toothpaste", 30, 10, "piece"));
+
+        // Product unit liter
+        market.addProduct(new ProductModel("Milk", 20, 10, "liter"));
+        market.addProduct(new ProductModel("Water", 5, 20, "liter"));
+        market.addProduct(new ProductModel("Juice", 30, 5, "liter"));
+        market.addProduct(new ProductModel("Soda", 10, 10, "liter"));
+        market.addProduct(new ProductModel("Beer", 50, 3, "liter"));
+
+        // Product unit pack
+        market.addProduct(new ProductModel("Chips", 10, 10, "pack"));
+        market.addProduct(new ProductModel("Chocolate", 5, 20, "pack"));
+        market.addProduct(new ProductModel("Candy", 1, 50, "pack"));
+        market.addProduct(new ProductModel("Gum", 2, 25, "pack"));
+        market.addProduct(new ProductModel("Cookies", 10, 10, "pack"));
     }
 
     private static void askUserBudget() {
@@ -41,8 +72,9 @@ public class Main {
         } else {
             System.out.println("1. Show the Cart: There is/are " + cart.getTotalProducts() + " product(s) in the cart");
         }
-        for (int i = 0; i < products.length; i++) {
-            System.out.println((i + 2) + ". " + products[i].getName() + " - " + products[i].getPrice() + " - " + products[i].getQuantity() + " - " + products[i].getUnit());
+        for (int i = 0; i < market.getProductCount(); i++) {
+            ProductModel product = market.getProduct(i);
+            System.out.println((i + 2) + ". " + product.getName() + " - " + product.getPrice() + " - " + product.getQuantity() + " - " + product.getUnit());
         }
     }
 
@@ -67,9 +99,10 @@ public class Main {
                 } else if (response.equals("1")) {
                     cart.buyProducts(customer);
                     break;
-                }  else {
-                    if (Integer.parseInt(response) >= 2 && Integer.parseInt(response) <= cart.getTotalProducts() + 1) {
-                        removeProductFromCart(response);
+                } else {
+                    int productIndex = Integer.parseInt(response) - 2;
+                    if (productIndex >= 0 && productIndex < cart.getTotalProducts()) {
+                        removeProductFromCart(productIndex);
                     } else {
                         System.out.println("There is no such product");
                         MyTimer.waitSecond(2);
@@ -79,15 +112,14 @@ public class Main {
         }
     }
 
-    private static void addProductToCart(String response) {
-        int productIndex = Integer.parseInt(response) - 2;
+    private static void addProductToCart(int productIndex) {
         System.out.println("Enter quantity to add");
         int quantity = getValidatedIntegerInput();
-        if (quantity > 0 && quantity <= products[productIndex].getQuantity()) {
+        ProductModel product = market.getProduct(productIndex);
+        if (quantity > 0 && quantity <= product.getQuantity()) {
             if (cart.getTotalProducts() < 5) {
-                System.out.println(quantity);
-                 cart.addProduct(products[productIndex], quantity);
-                products[productIndex].setQuantity(products[productIndex].getQuantity() - quantity);
+                cart.addProduct(product, quantity);
+                market.restockProduct(productIndex, product.getQuantity() - quantity);
             } else {
                 System.out.println("Cart is full");
                 MyTimer.waitSecond(2);
@@ -98,8 +130,7 @@ public class Main {
         }
     }
 
-    private static void removeProductFromCart(String response) {
-        int productIndex = Integer.parseInt(response) - 2;
+    private static void removeProductFromCart(int productIndex) {
         System.out.println("Enter quantity to remove");
         int quantity = getValidatedIntegerInput();
         ProductModel[] productsInCart = cart.getProducts();
@@ -107,50 +138,12 @@ public class Main {
                 && productsInCart[productIndex].getQuantity() > 0 && quantity > 0) {
 
             int removedQuantity = cart.removeProduct(productsInCart[productIndex], quantity);
-            products[findProductIndex(productsInCart[productIndex])]
-                    .setQuantity(products[findProductIndex(productsInCart[productIndex])].getQuantity() + removedQuantity);
-        }
-        else {
+            market.restockProduct(market.findProductIndex(productsInCart[productIndex]),
+                                  market.getProduct(market.findProductIndex(productsInCart[productIndex])).getQuantity() + removedQuantity);
+        } else {
             System.out.println("Invalid quantity or product");
             MyTimer.waitSecond(2);
         }
-    }
-
-    private static int findProductIndex(ProductModel productModel) {
-        for (int i = 0; i < products.length; i++) {
-            if (products[i].getName().equals(productModel.getName())) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    private static void buyProducts() {
-        System.out.println("Thank you for your purchase! Here is the summary:");
-        cart.printCart();
-        cart.clearCart();
-
-        removeOutOfStockProducts();
-    }
-
-    static void removeOutOfStockProducts() {
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null && products[i].getQuantity() <= 0) {
-                products = removeProductFromInventory(products, i);
-                i--;
-            }
-        }
-    }
-
-
-    private static ProductModel[] removeProductFromInventory(ProductModel[] products, int index) {
-        ProductModel[] newProducts = new ProductModel[products.length - 1];
-        for (int i = 0, j= 0; i < products.length; i++) {
-            if(i != index) {
-                newProducts[j++] = products[i];
-            }
-        }
-        return newProducts;
     }
 
     private static int getValidatedIntegerInput() {
@@ -163,5 +156,4 @@ public class Main {
             }
         }
     }
-
 }

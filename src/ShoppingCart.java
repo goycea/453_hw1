@@ -95,7 +95,6 @@ public class ShoppingCart {
             printCart();
             customer.subtractionBalance(totalCost);
             clearCart();
-            Main.removeOutOfStockProducts();
         } else {
             System.out.println("Insufficient balance. Your available balance: " + customer.getAvailableBalance() + ", Total cost: " + totalCost);
         }
