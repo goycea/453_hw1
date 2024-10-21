@@ -20,7 +20,7 @@ public class Market {
     }
 
     public void restockProduct(int index, int quantity) {
-        products[index].setQuantity(quantity);
+        products[index].setQuantity(quantity+ products[index].getQuantity());
     }
 
     public int findProductIndex(ProductModel product) {

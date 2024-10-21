@@ -74,7 +74,8 @@ public class Main {
         }
         for (int i = 0; i < market.getProductCount(); i++) {
             ProductModel product = market.getProduct(i);
-            System.out.println((i + 2) + ". " + product.getName() + " - " + product.getPrice() + " - " + product.getQuantity() + " - " + product.getUnit());
+            System.out.println((i + 2) + ". " + product.getName() + " - "  + product.getQuantity()+" "+ product.getUnit()+" stock"
+                    +" - "+ product.getPrice() + "₺ for each " + product.getUnit());
         }
     }
 
@@ -91,7 +92,8 @@ public class Main {
                 ProductModel[] productsInCart = cart.getProducts();
                 for (int i = 0; i < cart.getTotalProducts(); i++) {
                     System.out.println((i + 2) + ". " + productsInCart[i].getName() + " - "
-                            + productsInCart[i].getPrice() + " - " + productsInCart[i].getQuantity() + " - " + productsInCart[i].getUnit());
+                             + productsInCart[i].getQuantity()+ " " + productsInCart[i].getUnit()+" stock"+" - "
+                            + productsInCart[i].getPrice() + "₺ for each " + productsInCart[i].getUnit());
                 }
                 String response = user.next();
                 if (response.equals("0")) {
@@ -119,7 +121,7 @@ public class Main {
         if (quantity > 0 && quantity <= product.getQuantity()) {
             if (cart.getTotalProducts() < 5) {
                 cart.addProduct(product, quantity);
-                market.restockProduct(productIndex, product.getQuantity() - quantity);
+                market.restockProduct(productIndex, -quantity);
             } else {
                 System.out.println("Cart is full");
                 MyTimer.waitSecond(2);
@@ -136,7 +138,6 @@ public class Main {
         ProductModel[] productsInCart = cart.getProducts();
         if (productIndex >= 0 && productIndex < cart.getTotalProducts()
                 && productsInCart[productIndex].getQuantity() > 0 && quantity > 0) {
-
             int removedQuantity = cart.removeProduct(productsInCart[productIndex], quantity);
             market.restockProduct(market.findProductIndex(productsInCart[productIndex]),
                                   market.getProduct(market.findProductIndex(productsInCart[productIndex])).getQuantity() + removedQuantity);

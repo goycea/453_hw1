@@ -37,7 +37,7 @@ void restockProduct() {
         ProductModel product = new ProductModel("Apple", 5, 10, "kg");
         market.addProduct(product);
         market.restockProduct(0, 10);
-        assertEquals(10, market.getProduct(0).getQuantity());
+        assertEquals(20, market.getProduct(0).getQuantity());
     }
 
     @Test

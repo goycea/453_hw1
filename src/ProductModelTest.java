@@ -20,7 +20,7 @@ class ProductModelTest {
     }
 
     @org.junit.jupiter.api.Test
-    
+
     void getUnit() {
         ProductModel product = new ProductModel("TestProduct", 100, 10, "kg");
         assertEquals("kg", product.getUnit());
@@ -32,10 +32,6 @@ class ProductModelTest {
         product.setQuantity(20);
         assertEquals(20, product.getQuantity());
     }
-
-
-
-
 
     @org.junit.jupiter.api.Test
     void WrongGetName() {
@@ -101,4 +97,3 @@ class ProductModelTest {
 
 
 }
-
