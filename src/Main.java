@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     private static ShoppingCart cart = new ShoppingCart();
-    private static Market market = new Market(10); // Assuming a market size of 10
+    private static Market market = new Market(20); // Assuming a market size of 10
     private static Scanner user = new Scanner(System.in);
     private static Customer customer;
 
